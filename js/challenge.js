@@ -1,6 +1,13 @@
 const likesObject = {};
 let counter = document.querySelector("#counter");
-setInterval(() => counter.innerText++, 1000);
+let paused = false;
+
+//counts on the screen when it is not paused
+setInterval(() => {
+  if (!paused) {
+    counter.innerText++;
+  }
+}, 1000);
 
 //increment counter with plus and minus buttons
 document.querySelector("#plus").addEventListener("click", () => {
@@ -10,7 +17,7 @@ document.querySelector("#minus").addEventListener("click", () => {
   counter.innerText--;
 });
 
-//like a number and add it to screen
+//like a number and update DOM
 document.querySelector("#heart").addEventListener("click", () => {
   const counterValue = counter.innerText;
   if (counterValue in likesObject) {
@@ -29,4 +36,31 @@ document.querySelector("#heart").addEventListener("click", () => {
     document.querySelector(".likes").appendChild(listItem);
   }
   console.log(likesObject);
+});
+
+//pause and resume functionality
+document.getElementById("pause").addEventListener("click", (event) => {
+  if (event.target.innerText === "pause") {
+    paused = true;
+    document.querySelector("#plus").disabled = true;
+    document.querySelector("#minus").disabled = true;
+    document.querySelector("#heart").disabled = true;
+    document.querySelector("#submit").disabled = true;
+    event.target.innerText = "resume";
+  } else {
+    paused = false;
+    document.querySelector("#plus").disabled = false;
+    document.querySelector("#minus").disabled = false;
+    document.querySelector("#heart").disabled = false;
+    document.querySelector("#submit").disabled = false;
+    event.target.innerText = "pause";
+  }
+});
+
+//leave comments and put them on the screen
+document.getElementById("comment-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const p = document.createElement("p");
+  p.innerText = document.getElementById("comment-input").value;
+  document.getElementById("list").appendChild(p);
 });
